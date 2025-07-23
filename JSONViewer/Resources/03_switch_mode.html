@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <!-- when using the mode "code", it's important to specify charset utf-8 -->
+  <meta charset="utf-8">
+
+  <title>JSONEditor | Switch mode</title>
+
+  <link href="jsoneditor.min.css" rel="stylesheet" type="text/css">
+  <script src="jsoneditor.min.js"></script>
+
+  <style type="text/css">
+    body {
+      font: 10.5pt arial;
+      color: #4d4d4d;
+      line-height: 150%;
+      width: 500px;
+    }
+
+    code {
+      background-color: #f5f5f5;
+    }
+
+    #jsoneditor {
+      width: 500px;
+      height: 500px;
+    }
+    
+    /* 隐藏原来的小三角 */
+    .jsoneditor .jsoneditor-tree .jsoneditor-button {
+      background: none !important;
+    }
+
+    /* 收起时显示 + */
+    .jsoneditor .jsoneditor-expandable > .jsoneditor-field:before,
+    .jsoneditor .jsoneditor-expandable > .jsoneditor-value:before {
+      content: "+";
+      display: inline-block;
+      width: 12px;
+      color: #555;
+      font-weight: bold;
+      font-family: monospace;
+    }
+
+    /* 展开时显示 - */
+    .jsoneditor .jsoneditor-expanded > .jsoneditor-field:before,
+    .jsoneditor .jsoneditor-expanded > .jsoneditor-value:before {
+      content: "-";
+      color: #555;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+
+<p>
+  Switch editor mode using the mode box.
+  Note that the mode can be changed programmatically as well using the method
+  <code>editor.setMode(mode)</code>, try it in the console of your browser.
+</p>
+
+<div id="jsoneditor"></div>
+
+<script>
+  const container = document.getElementById('jsoneditor')
+
+  const options = {
+    mode: 'tree',
+    modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
+    onModeChange: function (newMode, oldMode) {
+      console.log('Mode switched from', oldMode, 'to', newMode)
+    }
+  }
+
+  const json = {
+    "array": [1, 2, 3],
+    "boolean": true,
+    "null": null,
+    "number": 123,
+    "object": {"a": "b", "c": "d"},
+    "string": "Hello World"
+  }
+
+  const editor = new JSONEditor(container, options, json)
+  
+  function customizeExpandCollapseIcons() {
+    const observer = new MutationObserver(() => {
+      document.querySelectorAll('.jsoneditor-expandable, .jsoneditor-expanded').forEach(node => {
+        let btn = node.querySelector('.custom-toggle');
+        if (!btn) {
+          btn = document.createElement('span');
+          btn.className = 'custom-toggle';
+          btn.style.cssText = `
+            display:inline-block;
+            width:12px;
+            font-weight:bold;
+            color:#555;
+            cursor:pointer;
+            user-select:none;
+          `;
+          node.insertBefore(btn, node.firstChild);
+        }
+        btn.textContent = node.classList.contains('jsoneditor-expanded') ? '-' : '+';
+        btn.onclick = () => {
+          node.querySelector('.jsoneditor-button').click();
+        };
+      });
+    });
+
+    observer.observe(document.querySelector('.jsoneditor'), {
+      childList: true,
+      subtree: true,
+      attributes: true
+    });
+  }
+  
+  customizeExpandCollapseIcons()
+</script>
+</body>
+</html>

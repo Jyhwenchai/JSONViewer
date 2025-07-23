@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>NSAppTransportSecurity</key>
+  <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+      <key>NSAllowsArbitraryLoadsInWebContent</key>
+      <true/>
+  </dict>
+
+  <key>NSNetworkVolumesUsageDescription</key>
+  <string>此应用需要网络访问权限来浏览网页</string>
+
+  <key>NSInternetUsageDescription</key>
+  <string>此应用需要访问互联网来加载网页内容</string>
+</dict>
+</plist>
